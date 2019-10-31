@@ -1,0 +1,14 @@
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh net-edit ovs-net-route
+or other application using the libvirt API.
+-->
+
+<network>
+  <name>ovs-net-route</name>
+  <uuid>e7d4b837-3395-49e6-ae0d-94d6cbf85326</uuid>
+  <forward mode='bridge'/>
+  <bridge name='ovs_sw3'/>
+  <virtualport type='openvswitch'/>
+</network>

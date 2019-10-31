@@ -1,0 +1,41 @@
+- hosts: localhost
+  become: yes
+  become_user: root
+  gather_facts: no
+
+  vars_prompt:
+    - name: "ref_vm"
+      prompt: "Enter the reference vm to build your VM xml"
+      private: no
+
+  vars:
+     json_file: "{{ lookup('file','/etc/ansible/test_bonus.json') | from_json }}"
+     f_name: '/etc/ansible/test_bonus.json'
+
+  tasks:
+
+    - name: Printing file
+      debug: msg="{{json_file}}"
+
+
+    - name: Create an XML File for VM
+      command: python /etc/ansible/modify_xml.py {{ref_vm}} {{f_name}}
+      become: yes
+
+    - name: Define a VM
+      virt:
+        name: '{{ item.vm_name }}'
+        command: define
+        xml: "{{ lookup('template', '/etc/libvirt/qemu/{{ item.vm_name }}.xml') }}"
+        uri: 'qemu:///system'
+      with_items: '{{json_file.guests}}'
+
+
+    - name: Start the VM
+      virt:
+        name: '{{ item.vm_name }}'
+        state: running
+        uri: 'qemu:///system'
+      with_items: '{{json_file.guests}}'
+
+

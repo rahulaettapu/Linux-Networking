@@ -1,0 +1,6 @@
+{ "guests":[
+	{"vm_name": "Bonus_VM1",
+	 "interface": ["ovs-net-nat","ovs-net-l2","ovs-net-l3"]
+	}
+	
+}]

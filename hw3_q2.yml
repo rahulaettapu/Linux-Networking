@@ -1,0 +1,142 @@
+- hosts: localhost
+  become: yes
+  gather_facts: no
+
+  vars:
+     packages:
+         - openvswitch-switch
+         - python-libvirt
+         - virt-manager
+         - python-lxml
+         - libvirt-bin
+         - dnsmasq
+
+  vars_prompt:
+        - name: "ovs_sw1"
+          prompt: "Enter the IP for nat mode"
+          private: no
+
+        - name: "ovs_sw3"
+          prompt: "Enter the IP for routed mode"
+          private: no
+
+        - name: "ovs_sw4"
+          prompt: "Enter the IP for other mode"
+          private: no
+
+  tasks:
+        - name: Install Packages
+          apt:
+          name: "{{ packages }}"
+          become: yes
+
+
+        - name: Create OVS Bridge for Net1 NAT mode
+          openvswitch_bridge:
+          bridge: ovs_sw1
+          state: present
+
+        - name: Create OVS Bridge for Net2
+          openvswitch_bridge:
+          bridge: ovs_sw2
+          state: present
+
+        - name: Create OVS Bridge for Net3 Routed mode
+          openvswitch_bridge:
+          bridge: ovs_sw3
+          state: present
+
+        - name: Create OVS Bridge for Net4 Other mode
+          openvswitch_bridge:
+          bridge: ovs_sw4
+          state: present
+
+          #Create Network1
+        - name: Define Network1
+          virt_net:
+          command: define
+          name: ovs-net-nat
+          xml: ' {{ lookup("template", "/etc/libvirt/qemu/networks/ovs-net-nat.xml") }} '
+
+        - name: Start Network1
+          virt_net:
+          command: create
+          name: ovs-net-nat
+
+
+        - name: Assign IP for ovs_sw1
+          command: ip addr add {{ ovs_sw1 }} dev ovs_sw1
+
+        - name: Make the Interface up
+          command: ip link set ovs_sw1 up
+
+        - name: Running the dnsmasq
+          command: bash masq_run.sh ovs_sw1 {{ovs_sw1}}
+
+        - name: Configure the iptables for NAT mode
+          command: bash nat-config.sh {{ovs_sw1}} ovs_sw1
+
+       # Creating L2 network
+
+        - name: Define L2 Network
+          virt_net:
+          command: define
+          name: ovs-net-l2
+          xml: ' {{ lookup("template", "/etc/libvirt/qemu/networks/ovs-net-l2.xml") }} '
+
+        - name: Create L2 Network
+          virt_net:
+          command: create
+          name: ovs-net-l2
+
+        - name: Make the device up
+          command: ip link set ovs_sw2 up
+
+       #Creating Network3 which is routed mode
+
+        - name: Define Network3
+          virt_net:
+          command: define
+          name: ovs-net-route
+          xml: ' {{ lookup("template", "/etc/libvirt/qemu/networks/ovs-net-route.xml") }} '
+
+        - name: Create Network3
+          virt_net:
+          command: create
+          name: ovs-net-route
+
+
+       - name: Assign IP for ovs_sw3
+         command: ip addr add {{ ovs_sw3 }} dev ovs_sw3
+
+       - name: Make the Interface up
+         command: ip link set ovs_sw3 up
+
+       - name: Running the dnsmasq
+         command: bash masq_run.sh ovs_sw3 {{ovs_sw3}}
+
+       - name: Configure the IP tables for Route Mode
+         command: bash route-config.sh {{ovs_sw3}} ovs_sw3
+
+       #Creating Network4 which is other mode
+       - name: Define Network4
+         virt_net:
+           command: define
+           name: ovs-net-other
+           xml: '{{ lookup("template", "/etc/libvirt/qemu/networks/ovs-net-other.xml") }} '
+
+       - name: Create Network4
+         virt_net:
+           command: create
+           name: ovs-net-other
+
+       - name: Make the Interface Up
+         command: ip link set ovs_sw4 up
+
+       - name: Assign Ip for ovs_sw4
+         command: ip addr add {{ovs_sw4}} dev ovs_sw4
+
+
+
+
+

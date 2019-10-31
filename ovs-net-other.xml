@@ -1,0 +1,14 @@
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh net-edit ovs-net-other
+or other application using the libvirt API.
+-->
+
+<network>
+  <name>ovs-net-other</name>
+  <uuid>983e7426-3d42-4c45-85a8-8eb9726c087f</uuid>
+  <forward mode='bridge'/>
+  <bridge name='ovs_sw4'/>
+  <virtualport type='openvswitch'/>
+</network>

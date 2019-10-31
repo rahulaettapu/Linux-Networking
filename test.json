@@ -1,0 +1,17 @@
+{ "guests":[
+	{"vm_name": "Test_VM1",
+	 "vcpu": "2",
+	 "ram": "2097152",
+	 "memory": "12582912",
+	 "interface": ["ovs-net-nat","ovs-net-l2"]
+	},
+
+	{"vm_name": "Test_VM2",
+	"vcpu": "2",
+	"ram": "2097152",
+	"memory": "12582912",
+	"interface":["ovs-net-nat","ovs-net-l2"]
+	}
+	]
+}
+

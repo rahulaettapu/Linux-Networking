@@ -1,0 +1,574 @@
+Domain nkovvurVM1 has interface eth3 with MAC address 52:5b:0a:4b:71:5f
+Domain nkovvurVM1 has interface eth3 with IPv4 address 192.168.150.204
+52:54:00:4b:74:6a
+<?xml version="1.0" ?>
+<domain id="30" type="kvm">
+	
+  
+	<name>nkovvurVM1</name>
+	
+  
+	<uuid>52f99770-ea52-4416-b3c7-73cca0a1b71b</uuid>
+	
+  
+	<memory unit="KiB">2097152</memory>
+	
+  
+	<currentMemory unit="KiB">2097152</currentMemory>
+	
+  
+	<vcpu placement="static">4</vcpu>
+	
+  
+	<resource>
+		
+    
+		<partition>/machine</partition>
+		
+  
+	</resource>
+	
+  
+	<os>
+		
+    
+		<type arch="x86_64" machine="pc-i440fx-bionic">hvm</type>
+		
+    
+		<boot dev="hd"/>
+		
+  
+	</os>
+	
+  
+	<features>
+		
+    
+		<acpi/>
+		
+    
+		<apic/>
+		
+    
+		<vmport state="off"/>
+		
+  
+	</features>
+	
+  
+	<cpu check="full" match="exact" mode="custom">
+		
+    
+		<model fallback="forbid">Skylake-Server-IBRS</model>
+		
+    
+		<vendor>Intel</vendor>
+		
+    
+		<feature name="ss" policy="require"/>
+		
+    
+		<feature name="vmx" policy="require"/>
+		
+    
+		<feature name="hypervisor" policy="require"/>
+		
+    
+		<feature name="tsc_adjust" policy="require"/>
+		
+    
+		<feature name="clflushopt" policy="require"/>
+		
+    
+		<feature name="pku" policy="require"/>
+		
+    
+		<feature name="md-clear" policy="require"/>
+		
+    
+		<feature name="ssbd" policy="require"/>
+		
+    
+		<feature name="xsaves" policy="require"/>
+		
+  
+	</cpu>
+	
+  
+	<clock offset="utc">
+		
+    
+		<timer name="rtc" tickpolicy="catchup"/>
+		
+    
+		<timer name="pit" tickpolicy="delay"/>
+		
+    
+		<timer name="hpet" present="no"/>
+		
+  
+	</clock>
+	
+  
+	<on_poweroff>destroy</on_poweroff>
+	
+  
+	<on_reboot>restart</on_reboot>
+	
+  
+	<on_crash>destroy</on_crash>
+	
+  
+	<pm>
+		
+    
+		<suspend-to-mem enabled="no"/>
+		
+    
+		<suspend-to-disk enabled="no"/>
+		
+  
+	</pm>
+	
+  
+	<devices>
+		
+    
+		<emulator>/usr/bin/kvm-spice</emulator>
+		
+    
+		<disk device="disk" type="file">
+			
+      
+			<driver name="qemu" type="qcow2"/>
+			
+      
+			<source file="/var/lib/libvirt/images/nkovvurVM1.img"/>
+			
+      
+			<backingStore/>
+			
+      
+			<target bus="virtio" dev="vda"/>
+			
+      
+			<alias name="virtio-disk0"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" slot="0x07" type="pci"/>
+			
+    
+		</disk>
+		
+    
+		<disk device="cdrom" type="file">
+			
+      
+			<target bus="ide" dev="hda"/>
+			
+      
+			<readonly/>
+			
+      
+			<alias name="ide0-0-0"/>
+			
+      
+			<address bus="0" controller="0" target="0" type="drive" unit="0"/>
+			
+    
+		</disk>
+		
+    
+		<controller index="0" model="ich9-ehci1" type="usb">
+			
+      
+			<alias name="usb"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x7" slot="0x05" type="pci"/>
+			
+    
+		</controller>
+		
+    
+		<controller index="0" model="ich9-uhci1" type="usb">
+			
+      
+			<alias name="usb"/>
+			
+      
+			<master startport="0"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" multifunction="on" slot="0x05" type="pci"/>
+			
+    
+		</controller>
+		
+    
+		<controller index="0" model="ich9-uhci2" type="usb">
+			
+      
+			<alias name="usb"/>
+			
+      
+			<master startport="2"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x1" slot="0x05" type="pci"/>
+			
+    
+		</controller>
+		
+    
+		<controller index="0" model="ich9-uhci3" type="usb">
+			
+      
+			<alias name="usb"/>
+			
+      
+			<master startport="4"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x2" slot="0x05" type="pci"/>
+			
+    
+		</controller>
+		
+    
+		<controller index="0" model="pci-root" type="pci">
+			
+      
+			<alias name="pci.0"/>
+			
+    
+		</controller>
+		
+    
+		<controller index="0" type="ide">
+			
+      
+			<alias name="ide"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x1" slot="0x01" type="pci"/>
+			
+    
+		</controller>
+		
+    
+		<controller index="0" type="virtio-serial">
+			
+      
+			<alias name="virtio-serial0"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" slot="0x06" type="pci"/>
+			
+    
+		</controller>
+		
+    
+		<interface type="network">
+			
+      
+			<mac address="52:54:00:83:c8:4c"/>
+			
+      
+			<source bridge="virbr0" network="default"/>
+			
+      
+			<target dev="vnet0"/>
+			
+      
+			<model type="virtio"/>
+			
+      
+			<alias name="net0"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" slot="0x03" type="pci"/>
+			
+    
+		</interface>
+		
+    
+		<interface type="bridge">
+			
+      
+			<mac address="52:54:00:4b:74:6a"/>
+			
+      
+			<source bridge="net3br0"/>
+			
+      
+			<target dev="vnet1"/>
+			
+      
+			<model type="virtio"/>
+			
+      
+			<alias name="net1"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" slot="0x0a" type="pci"/>
+			
+    
+		</interface>
+		
+    
+		<interface type="network">
+			
+      
+			<mac address="52:5b:0a:4b:71:5f"/>
+			
+      
+			<source bridge="net4br0" network="raettapN4"/>
+			
+      
+			<target dev="vnet2"/>
+			
+      
+			<model type="virtio"/>
+			
+      
+			<alias name="net2"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" slot="0x0b" type="pci"/>
+			
+    
+		</interface>
+		
+    
+		<interface type="bridge">
+			
+      
+			<mac address="52:54:00:cb:c6:27"/>
+			
+      
+			<source bridge="net2br0"/>
+			
+      
+			<target dev="vnet3"/>
+			
+      
+			<model type="virtio"/>
+			
+      
+			<alias name="net3"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" slot="0x09" type="pci"/>
+			
+    
+		</interface>
+		
+    
+		<serial type="pty">
+			
+      
+			<source path="/dev/pts/0"/>
+			
+      
+			<target port="0" type="isa-serial">
+				
+        
+				<model name="isa-serial"/>
+				
+      
+			</target>
+			
+      
+			<alias name="serial0"/>
+			
+    
+		</serial>
+		
+    
+		<console tty="/dev/pts/0" type="pty">
+			
+      
+			<source path="/dev/pts/0"/>
+			
+      
+			<target port="0" type="serial"/>
+			
+      
+			<alias name="serial0"/>
+			
+    
+		</console>
+		
+    
+		<channel type="unix">
+			
+      
+			<source mode="bind" path="/var/lib/libvirt/qemu/channel/target/domain-30-nkovvurVM1/org.qemu.guest_agent.0"/>
+			
+      
+			<target name="org.qemu.guest_agent.0" state="connected" type="virtio"/>
+			
+      
+			<alias name="channel0"/>
+			
+      
+			<address bus="0" controller="0" port="1" type="virtio-serial"/>
+			
+    
+		</channel>
+		
+    
+		<channel type="spicevmc">
+			
+      
+			<target name="com.redhat.spice.0" state="disconnected" type="virtio"/>
+			
+      
+			<alias name="channel1"/>
+			
+      
+			<address bus="0" controller="0" port="2" type="virtio-serial"/>
+			
+    
+		</channel>
+		
+    
+		<input bus="usb" type="tablet">
+			
+      
+			<alias name="input0"/>
+			
+      
+			<address bus="0" port="1" type="usb"/>
+			
+    
+		</input>
+		
+    
+		<input bus="ps2" type="mouse">
+			
+      
+			<alias name="input1"/>
+			
+    
+		</input>
+		
+    
+		<input bus="ps2" type="keyboard">
+			
+      
+			<alias name="input2"/>
+			
+    
+		</input>
+		
+    
+		<graphics autoport="yes" listen="127.0.0.1" port="5900" type="spice">
+			
+      
+			<listen address="127.0.0.1" type="address"/>
+			
+      
+			<image compression="off"/>
+			
+    
+		</graphics>
+		
+    
+		<sound model="ich6">
+			
+      
+			<alias name="sound0"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" slot="0x04" type="pci"/>
+			
+    
+		</sound>
+		
+    
+		<video>
+			
+      
+			<model heads="1" primary="yes" ram="65536" type="qxl" vgamem="16384" vram="65536"/>
+			
+      
+			<alias name="video0"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" slot="0x02" type="pci"/>
+			
+    
+		</video>
+		
+    
+		<redirdev bus="usb" type="spicevmc">
+			
+      
+			<alias name="redir0"/>
+			
+      
+			<address bus="0" port="2" type="usb"/>
+			
+    
+		</redirdev>
+		
+    
+		<redirdev bus="usb" type="spicevmc">
+			
+      
+			<alias name="redir1"/>
+			
+      
+			<address bus="0" port="3" type="usb"/>
+			
+    
+		</redirdev>
+		
+    
+		<memballoon model="virtio">
+			
+      
+			<alias name="balloon0"/>
+			
+      
+			<address bus="0x00" domain="0x0000" function="0x0" slot="0x08" type="pci"/>
+			
+    
+		</memballoon>
+		
+  
+	</devices>
+	
+  
+	<seclabel model="apparmor" relabel="yes" type="dynamic">
+		
+    
+		<label>libvirt-52f99770-ea52-4416-b3c7-73cca0a1b71b</label>
+		
+    
+		<imagelabel>libvirt-52f99770-ea52-4416-b3c7-73cca0a1b71b</imagelabel>
+		
+  
+	</seclabel>
+	
+  
+	<seclabel model="dac" relabel="yes" type="dynamic">
+		
+    
+		<label>+64055:+114</label>
+		
+    
+		<imagelabel>+64055:+114</imagelabel>
+		
+  
+	</seclabel>
+	
+
+</domain>
+
+Domain nkovvurVM1 has interface eth2 with MAC address 52:54:00:4b:74:69
+Domain nkovvurVM1 has interface eth1 with MAC address 52:54:00:cb:c6:27
+Domain nkovvurVM1 has interface eth0 with MAC address 52:54:00:83:c8:4c
+Domain nkovvurVM1 has interface eth0 with IPv4 address 192.168.123.148
